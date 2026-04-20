@@ -1,0 +1,9 @@
+<div style="max-width: 400px; margin: 50px auto;">
+    <h2>Ro'yxatdan o'tish</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Ro'yxatdan o'tish</button>
+    </form>
+    <p>Akkauntingiz bormi? <a href="{% url 'login' %}">Kirish</a></p>
+</div>
