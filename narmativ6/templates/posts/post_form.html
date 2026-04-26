@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
+        <h3>{% if post %}Postni tahrirlash{% else %}Yangi post yaratish{% endif %}</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Sarlavha</label>
+                <input type="text" name="title" class="form-control" value="{{ post.title|default:'' }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Matn</label>
+                <textarea name="content" class="form-control" rows="5" required>{{ post.content|default:'' }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Saqlash</button>
+            <a href="{% url 'post_list' %}" class="btn btn-link w-100 mt-2">Bekor qilish</a>
+        </form>
+    </div>
+{% endblock %}
