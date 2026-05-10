@@ -1,21 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import permission_required # Yangi import
 from .models import Post
-from accounts.decorators import my_login_required
 
+# 1. Hammaning ruxsati bor (Read)
 def post_list(request):
     posts = Post.objects.all()
     return render(request, 'posts/post_list.html', {'posts': posts})
 
-@my_login_required
+# 2. Faqat Admin guruhidagilar (add_post permissioni borlar) uchun
+@permission_required('posts.add_post', raise_exception=True)
 def post_create(request):
     if request.method == "POST":
         title = request.POST.get('title')
         content = request.POST.get('content')
+        # Normativda muallifni saqlash so'ralmagan bo'lsa ham, bu yaxshi amaliyot
         Post.objects.create(title=title, content=content)
         return redirect('post_list')
     return render(request, 'posts/post_form.html')
 
-@my_login_required
+# 3. Faqat Admin guruhidagilar (change_post permissioni borlar) uchun
+@permission_required('posts.change_post', raise_exception=True)
 def post_update(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -25,7 +29,8 @@ def post_update(request, pk):
         return redirect('post_list')
     return render(request, 'posts/post_form.html', {'post': post})
 
-@my_login_required
+# 4. Faqat Admin guruhidagilar (delete_post permissioni borlar) uchun
+@permission_required('posts.delete_post', raise_exception=True)
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()

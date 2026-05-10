@@ -3,7 +3,9 @@
 {% block content %}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Barcha Postlar</h2>
-        {% if request.user.is_authenticated %}
+
+        {# 1. Faqat post qo'shish ruxsati borlar (Admin) ko'radi #}
+        {% if perms.posts.add_post %}
             <a href="{% url 'post_create' %}" class="btn btn-success">+ Yangi Post</a>
         {% endif %}
     </div>
@@ -17,10 +19,16 @@
                     <p class="card-text">{{ post.content|truncatechars:100 }}</p>
 
                     <div class="mt-3">
+                        {# Batafsil ko'rish hamma uchun ochiq #}
                         <a href="#" class="btn btn-sm btn-outline-primary">Batafsil</a>
 
-                        {% if request.user.is_authenticated %}
+                        {# 2. Faqat tahrirlash ruxsati borlar ko'radi #}
+                        {% if perms.posts.change_post %}
                             <a href="{% url 'post_update' post.id %}" class="btn btn-sm btn-warning">Tahrirlash</a>
+                        {% endif %}
+
+                        {# 3. Faqat o'chirish ruxsati borlar ko'radi #}
+                        {% if perms.posts.delete_post %}
                             <a href="{% url 'post_delete' post.id %}" class="btn btn-sm btn-danger"
                                onclick="return confirm('Rostdan ham o‘chirmoqchimisiz?')">O‘chirish</a>
                         {% endif %}
